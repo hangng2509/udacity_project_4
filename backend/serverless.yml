@@ -9,6 +9,7 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-plugin-tracing
   - serverless-reqvalidator-plugin
+  - serverless-aws-documentation
 
 provider:
   name: aws
@@ -65,6 +66,19 @@ provider:
     #   Action:
     #     - secretsmanager:GetSecretValue
     #   Resource: !Ref Auth0Secret
+
+custom:
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Serverless To Do App
+        description: Serverless application for creating to do item with images
+    models:
+      - name: CreateTodoRequest
+        contentType: application/json
+        schema: ${file(src/models/create-todo-model.json)}
+
 functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
@@ -79,6 +93,7 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
+
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -113,9 +128,12 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
-          request:
-            schemas:
-              application/json: ${file(models/create-todo-model.json)}
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create todo item
+            description: Create new todo item
+            requestModels:
+              'application/json': CreateTodoRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -158,6 +176,7 @@ functions:
       #   Action:
       #     - kms:Decrypt
       #   Resource: !GetAtt KMSKey.Arn
+
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
   UpdateTodo:
@@ -230,6 +249,15 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL # What attributes will be copied to an index
+
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: 'request-body-validator'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false
 
     # TODO: Complete the bucket properties below.
     # Do not forget to add the CorsConfiguration propoerty
