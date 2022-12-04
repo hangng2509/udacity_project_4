@@ -12,13 +12,13 @@ const bucketName = process.env.ATTACHMENT_S3_BUCKET
 const urlExpiration = process.env.SIGNED_URL_EXPIRATION
 
 export function getAttachment(todoId: string) {
-  return `https://${bucketName}.s3.amazonaws.com/${todoId}`
+  return `https://${bucketName}.s3.amazonaws.com/${todoId}.png`
 }
 
 export function getUploadUrl(todoId: string): string {
   const s3Url = s3.getSignedUrl('putObject', {
     Bucket: bucketName,
-    Key: todoId,
+    Key: todoId + '.png',
     Expires: urlExpiration
   })
   return s3Url as string
