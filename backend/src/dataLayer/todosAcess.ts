@@ -1,10 +1,10 @@
-import { UpdateTodoRequest } from './../requests/UpdateTodoRequest'
+import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import * as AWS from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
 // import { TodoUpdate } from '../models/TodoUpdate'
-import { getAttachment } from './attachmentUtils'
+import { getAttachment } from '../fileStorage/attachmentUtils'
 
 const AWSXRay = require('aws-xray-sdk')
 const XAWS = AWSXRay.captureAWS(AWS)

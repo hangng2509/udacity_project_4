@@ -3,8 +3,8 @@ import {
   deleteTodo,
   updateTodo,
   updateURL
-} from '../helpers/todosAcess'
-import { getAttachment } from './attachmentUtils'
+} from '../dataLayer/todosAcess'
+import { getAttachment } from '../fileStorage/attachmentUtils'
 import { TodoItem } from '../models/TodoItem'
 // import { TodoUpdate } from '../models/TodoUpdate'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
